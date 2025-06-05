@@ -1,37 +1,28 @@
+import { IsString, IsEmail, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @ApiProperty({
-    description: 'Indica si el usuario es administrador',
-    example: false,
-    required: false,
-  })
-  is_admin?: boolean;
+  @ApiProperty()
+  @IsString()
+  nombre: string;
 
-  @ApiProperty({ description: 'Nombre(s) del usuario', example: 'Juan' })
-  names: string;
+  @ApiProperty()
+  @IsString()
+  ape_paterno: string;
 
-  @ApiProperty({ description: 'Apellido(s) del usuario', example: 'Pérez' })
-  lastname: string;
+  @ApiProperty()
+  @IsString()
+  ape_materno: string;
 
-  @ApiProperty({
-    description: 'Correo electrónico',
-    example: 'juan.perez@example.com',
-  })
-  mail: string;
+  @ApiProperty()
+  @IsEmail()
+  correo: string;
 
-  @ApiProperty({ description: 'Contraseña', example: '12345678' })
-  password: string;
+  @ApiProperty()
+  @IsString()
+  contrasena: string;
 
-  @ApiProperty({ description: 'Edad', example: 30 })
-  age: number;
-
-  @ApiProperty({ description: 'Número telefónico', example: '5551234567' })
-  phoneNumber: string;
-
-  @ApiProperty({
-    description: 'Dirección',
-    example: 'Calle Ficticia 123, Ciudad',
-  })
-  address: string;
+  @ApiProperty()
+  @IsBoolean()
+  rol: boolean;
 }
