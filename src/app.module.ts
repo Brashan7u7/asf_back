@@ -1,48 +1,35 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { AuthGuard } from './auth/auth.guard';
-import { CommonModule } from './common/common.module';
-
-import { ClsInterceptor } from './common/cls.interceptor';
-import { ClsModule } from 'nestjs-cls';
-import { UsuariosModule } from './usuarios/usuarios.module';
 import { UserModule } from './user/user.module';
+import { AuditoriaModule } from './auditoria/auditoria.module';
+import { NoticiaModule } from './noticia/noticia.module';
+import { NotificacionModule } from './notificacion/notificacion.module';
+import { AuthModule } from './auth/auth.module';
+import { AppService } from './app.service';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 5434,
-      username: 'asf_user',
-      password: 'DJE20ben',
+      port: 5432,
+      username: 'postgres',
+      password: '1234',
       database: 'asf_db',
       logging: true,
       autoLoadEntities: true,
       synchronize: true,
       ssl: false,
     }),
-    ClsModule.forRoot({
-      global: true,
-      middleware: {
-        mount: true,
-      },
-    }),
-    AuthModule,
-    UsuariosModule,
-    CommonModule,
     UserModule,
+    AuditoriaModule,
+    NoticiaModule,
+    NotificacionModule,
+    AuthModule
   ],
-  controllers: [AppController],
   providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ClsInterceptor,
-    },
     AppService,
     {
       provide: APP_GUARD,
@@ -50,4 +37,4 @@ import { UserModule } from './user/user.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
