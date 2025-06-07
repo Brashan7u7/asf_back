@@ -25,7 +25,16 @@ import { ConfigModule } from "@nestjs/config";
       logging: true,
       autoLoadEntities: true,
       synchronize: true,
-      ssl: false,
+
+      ssl: process.env.POSTGRES_SSL === "true",
+      extra: {
+        ssl:
+          process.env.POSTGRES_SSL === "true"
+            ? {
+                rejectUnauthorized: false,
+              }
+            : null,
+      },
     }),
     UserModule,
     AuditoriaModule,
