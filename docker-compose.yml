@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   postgres:
-    container_name: ASFPostgres
+    container_name: ASF
     image: postgres:latest
     restart: always
     ports:
-      - '5434:5432'
+      - '5432:5432'
     environment:
       POSTGRES_USER: asf_user
       POSTGRES_PASSWORD: DJE20ben
