@@ -1,17 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateAuditoriaDto } from './dto/create-auditoria.dto';
-import { UpdateAuditoriaDto } from './dto/update-auditoria.dto';
-import { Auditoria } from './entities/auditoria.entity';
-import { User } from 'src/user/entities/user.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { CreateAuditoriaDto } from "./dto/create-auditoria.dto";
+import { UpdateAuditoriaDto } from "./dto/update-auditoria.dto";
+import { Auditoria } from "./entities/auditoria.entity";
+import { User } from "src/user/entities/user.entity";
 
 @Injectable()
 export class AuditoriaService {
   constructor(
     @InjectRepository(Auditoria)
-    private readonly repo: Repository<Auditoria>,
-  ) { }
+    private readonly repo: Repository<Auditoria>
+  ) {}
 
   async create(dto: CreateAuditoriaDto) {
     const nueva = this.repo.create({
@@ -21,12 +21,38 @@ export class AuditoriaService {
     return this.repo.save(nueva);
   }
 
-  async findAll() {
-    return this.repo.find({ relations: ['usuario'] });
+  async findAll(page: number, limit: number, search?: string, filtro?: string) {
+    const query = this.repo.createQueryBuilder("Auditorias");
+    if (filtro) {
+      query.andWhere('LOWER("Auditorias".search) LIKE LOWER(:filtro)', {
+        filtro: `%${filtro}`,
+      });
+    }
+
+    if (search) {
+      query.andWhere('LOWER("Auditorias".search) LIKE LOWER(:search)', {
+        search: `%${search}%`,
+      });
+    }
+
+    const [data, total] = await query
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return {
+      data,
+      total,
+      page,
+      lastPage: Math.ceil(total / limit),
+    };
   }
 
   async findOne(id: number) {
-    const auditoria = await this.repo.findOne({ where: { id }, relations: ['usuario'] });
+    const auditoria = await this.repo.findOne({
+      where: { id },
+      relations: ["usuario"],
+    });
 
     if (!auditoria) {
       throw new NotFoundException(`Auditoría con id ${id} no encontrada`);
@@ -36,7 +62,10 @@ export class AuditoriaService {
   }
 
   async update(id: number, dto: UpdateAuditoriaDto) {
-    const auditoria = await this.repo.findOne({ where: { id }, relations: ['usuario'] });
+    const auditoria = await this.repo.findOne({
+      where: { id },
+      relations: ["usuario"],
+    });
 
     if (!auditoria) {
       throw new NotFoundException(`Auditoría con id ${id} no encontrada`);

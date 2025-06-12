@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { AuditoriaService } from './auditoria.service';
 import { CreateAuditoriaDto } from './dto/create-auditoria.dto';
 import { UpdateAuditoriaDto } from './dto/update-auditoria.dto';
@@ -19,8 +19,14 @@ export class AuditoriaController {
   @ApiBearerAuth('jwt')
   @UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.auditoriaService.findAll();
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('filtro') filtro?: string ,
+    @Query('search') search?: string,
+  ) {
+    if(filtro === 'todos'){filtro = undefined;}
+    return this.auditoriaService.findAll(+page, +limit, filtro, search);
   }
 
   @ApiBearerAuth('jwt')
