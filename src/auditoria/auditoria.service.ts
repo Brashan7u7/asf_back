@@ -28,7 +28,7 @@ export class AuditoriaService {
   async findAll(page: number, limit: number, search?: string, filtro?: string) {
     const query = this.repo.createQueryBuilder("Auditorias");
     if (filtro) {
-      query.andWhere('LOWER("Auditorias"."estatus") LIKE LOWER(:filtro)', {
+      query.andWhere('LOWER("Auditorias"."nombre") LIKE LOWER(:filtro)', {
         filtro: `%${filtro}%`,
       });
     }
@@ -36,7 +36,9 @@ export class AuditoriaService {
     if (search) {
       query.andWhere(
         `LOWER("Auditorias"."nombre") LIKE LOWER(:search)
-     `,
+     OR LOWER("Auditorias"."descripcion") LIKE LOWER(:search)
+     OR LOWER("Auditorias"."observaciones") LIKE LOWER(:search)
+     OR LOWER("Auditorias"."estatus") LIKE LOWER(:search)`,
         {
           search: `%${search}%`,
         }
