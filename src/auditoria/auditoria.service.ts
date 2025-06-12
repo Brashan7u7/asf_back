@@ -108,7 +108,7 @@ export class AuditoriaService {
   }
   async filtro(filtro: string): Promise<Auditoria[]> {
     return this.repo.find({
-      where: { nombre: filtro },
+      where: { tipo: filtro },
     });
   }
 }
