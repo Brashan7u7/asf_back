@@ -37,7 +37,8 @@ export class AuditoriaService {
       query.andWhere(
         `LOWER("Auditorias"."nombre") LIKE LOWER(:search)
      OR LOWER("Auditorias"."descripcion") LIKE LOWER(:search)
-     OR LOWER("Auditorias"."observaciones") LIKE LOWER(:search)`,
+     OR LOWER("Auditorias"."observaciones") LIKE LOWER(:search)
+     OR LOWER("Auditorias"."estatus") LIKE LOWER(:search)`,
         {
           search: `%${search}%`,
         }
@@ -108,7 +109,7 @@ export class AuditoriaService {
   }
   async filtro(filtro: string): Promise<Auditoria[]> {
     return this.repo.find({
-      where: { tipo: filtro },
+      where: { estatus: Number(filtro) },
     });
   }
 }
