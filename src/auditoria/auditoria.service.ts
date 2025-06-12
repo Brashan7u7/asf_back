@@ -21,6 +21,10 @@ export class AuditoriaService {
     return this.repo.save(nueva);
   }
 
+   async findAlldos() {
+    return this.repo.find({ relations: ['usuario'] });
+  }
+
   async findAll(page: number, limit: number, search?: string, filtro?: string) {
     const query = this.repo.createQueryBuilder("Auditorias");
     if (filtro) {

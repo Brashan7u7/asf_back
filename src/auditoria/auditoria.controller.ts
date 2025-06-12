@@ -31,6 +31,15 @@ export class AuditoriaController {
 
   @ApiBearerAuth('jwt')
   @UseGuards(AuthGuard)
+  @Get('/dashboard')
+  findAlldos() {
+    return this.auditoriaService.findAlldos();
+  }
+
+  
+
+  @ApiBearerAuth('jwt')
+  @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.auditoriaService.findOne(+id);
