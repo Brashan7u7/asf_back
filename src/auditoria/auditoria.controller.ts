@@ -72,10 +72,15 @@ export class AuditoriaController {
     return this.auditoriaService.remove(+id);
   }
 
+  @ApiBearerAuth("jwt")
+  @UseGuards(AuthGuard)
   @Get("search/:search")
   async search(@Param("search") search: string) {
     return this.auditoriaService.search(search);
   }
+  
+  @ApiBearerAuth("jwt")
+  @UseGuards(AuthGuard)
   @Get("filtro/:filtro")
   async filtro(@Param("filtro") filtro: string) {
     return this.auditoriaService.search(filtro);
