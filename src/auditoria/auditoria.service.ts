@@ -21,8 +21,8 @@ export class AuditoriaService {
     return this.repo.save(nueva);
   }
 
-   async findAlldos() {
-    return this.repo.find({ relations: ['usuario'] });
+  async findAlldos() {
+    return this.repo.find({ relations: ["usuario"] });
   }
 
   async findAll(page: number, limit: number, search?: string, filtro?: string) {
@@ -93,5 +93,17 @@ export class AuditoriaService {
 
     await this.repo.delete(id);
     return { message: `Auditoría con id ${id} eliminada correctamente` };
+  }
+
+  async search(search: string): Promise<Auditoria[]> {
+    return this.repo.find({
+      where: { nombre: search },
+      select: ["nombre"],
+    });
+  }
+  async filtro(filtro: string): Promise<Auditoria[]> {
+    return this.repo.find({
+      where: { nombre: filtro },
+    });
   }
 }
